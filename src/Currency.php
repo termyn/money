@@ -16,6 +16,11 @@ abstract readonly class Currency implements Stringable
     ) {
     }
 
+    public function __toString(): string
+    {
+        return $this->code();
+    }
+
     public function equals(self $that): bool
     {
         return $this->mainUnit->equals($that->mainUnit)
@@ -35,10 +40,5 @@ abstract readonly class Currency implements Stringable
     public function precision(): int
     {
         return $this->subunit->precision();
-    }
-
-    public function __toString(): string
-    {
-        return $this->code();
     }
 }

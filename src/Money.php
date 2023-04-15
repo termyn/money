@@ -9,14 +9,18 @@ use Termyn\Money\MismatchCurrencies;
 final readonly class Money
 {
     final public const ROUND_HALF_EVEN = PHP_ROUND_HALF_EVEN;
+
     final public const ROUND_HALF_DOWN = PHP_ROUND_HALF_DOWN;
+
     final public const ROUND_HALF_ODD = PHP_ROUND_HALF_ODD;
+
     final public const ROUND_HALF_UP = PHP_ROUND_HALF_UP;
 
     public float $amount;
+
     private int $amountInSubunit;
 
-    final protected function __construct(
+    final private function __construct(
         int|float $amount,
         public Currency $currency,
     ) {
