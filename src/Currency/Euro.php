@@ -8,7 +8,7 @@ use Termyn\Currency;
 use Termyn\Currency\Unit\Subunit;
 use Termyn\Currency\Unit\Superunit;
 
-final class Euro extends Currency
+final readonly class Euro extends Currency
 {
     public function __construct()
     {

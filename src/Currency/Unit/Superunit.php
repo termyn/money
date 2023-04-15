@@ -6,12 +6,16 @@ namespace Termyn\Currency\Unit;
 
 use Webmozart\Assert\Assert;
 
-final class Superunit
+final readonly class Superunit
 {
+    public string $code;
+
     public function __construct(
-        public readonly string $code,
-        public readonly string $symbol,
+        string $code,
+        public string $symbol,
     ) {
+        $this->code = mb_strtoupper($code);
+
         Assert::regex($this->code, '/^[A-Z]{3}$/');
         Assert::notEmpty($this->symbol);
     }

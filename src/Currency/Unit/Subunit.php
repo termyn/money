@@ -6,12 +6,12 @@ namespace Termyn\Currency\Unit;
 
 use Webmozart\Assert\Assert;
 
-final class Subunit
+final readonly class Subunit
 {
     public function __construct(
-        public readonly string $code,
-        public readonly string $symbol,
-        public readonly int $fraction,
+        public string $code,
+        public string $symbol,
+        public int $fraction,
     ) {
         Assert::notEmpty($this->code);
         Assert::notEmpty($this->symbol);
