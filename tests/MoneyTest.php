@@ -63,6 +63,8 @@ final class MoneyTest extends TestCase
         $this->expectException(MismatchCurrencies::class);
 
         $first->equals($second);
+        $first->add($second);
+        $first->subtract($second);
     }
 
     public function testEquality(): void
@@ -222,5 +224,12 @@ final class MoneyTest extends TestCase
         $this->assertEquals($amount, $negatedPositive->amount);
         $this->assertEquals($amount, $negatedNegative->amount);
         $this->assertEquals(0, $negatedZero->amount);
+    }
+
+    public function testToString(): void
+    {
+        $money = Money::of(1.2, $this->euro);
+
+        $this->assertEquals('1.20 EUR', sprintf('%s', $money));
     }
 }
