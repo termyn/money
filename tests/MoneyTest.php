@@ -55,7 +55,18 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->isComparable($notComparable));
     }
 
-    public function testThrowExceptionOnMismatchCurrencies(): void
+    public function testEquality(): void
+    {
+        $origin = Money::of(1.2, $this->euro);
+        $same = Money::of(1.2, $this->euro);
+        $similar = Money::of(2.2, $this->euro);
+        $another = Money::of(2.2, $this->usDollar);
+
+        $this->assertTrue($origin->equals($same));
+        $this->assertFalse($origin->equals($similar));
+    }
+
+    public function testEqualityThrowsExceptionOnMismatchCurrencies(): void
     {
         $first = Money::of(1.2, $this->euro);
         $second = Money::of(1.2, $this->usDollar);
@@ -63,18 +74,6 @@ final class MoneyTest extends TestCase
         $this->expectException(MismatchCurrencies::class);
 
         $first->equals($second);
-        $first->add($second);
-        $first->subtract($second);
-    }
-
-    public function testEquality(): void
-    {
-        $origin = Money::of(1.2, $this->euro);
-        $same = Money::of(1.2, $this->euro);
-        $similar = Money::of(2.2, $this->euro);
-
-        $this->assertTrue($origin->equals($same));
-        $this->assertFalse($origin->equals($similar));
     }
 
     public function testItIsGreaterThan(): void
@@ -162,6 +161,16 @@ final class MoneyTest extends TestCase
         $this->assertEquals($amount + $amount, $addition->amount);
     }
 
+    public function testAdditionThrowsExceptionOnMismatchCurrencies(): void
+    {
+        $augend = Money::of(1.2, $this->euro);
+        $addend = Money::of(1.2, $this->usDollar);
+
+        $this->expectException(MismatchCurrencies::class);
+
+        $augend->add($addend);
+    }
+
     public function testSubtraction(): void
     {
         $amount = 10.2;
@@ -170,6 +179,16 @@ final class MoneyTest extends TestCase
         $subtraction = $minuend->subtract($minuend);
 
         $this->assertEquals($amount - $amount, $subtraction->amount);
+    }
+
+    public function testSubtractionThrowsExceptionOnMismatchCurrencies(): void
+    {
+        $minuend = Money::of(1.2, $this->euro);
+        $subtrahend = Money::of(1.2, $this->usDollar);
+
+        $this->expectException(MismatchCurrencies::class);
+
+        $minuend->subtract($subtrahend);
     }
 
     public function testMultiplication(): void
