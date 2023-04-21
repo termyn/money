@@ -65,7 +65,7 @@ final class MoneyTest extends TestCase
         $first->equals($second);
     }
 
-    public function testEquality()
+    public function testEquality(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $same = Money::of(1.2, $this->euro);

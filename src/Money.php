@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Termyn;
 
+use Stringable;
 use Termyn\Money\MismatchCurrencies;
 
-final readonly class Money
+final readonly class Money implements Stringable
 {
     final public const ROUND_HALF_EVEN = PHP_ROUND_HALF_EVEN;
 
@@ -28,6 +29,11 @@ final readonly class Money
 
         $this->amountInSubunit = intval($amount * $fraction);
         $this->amount = floatval($this->amountInSubunit / $fraction);
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%s %s', $this->amount, $this->currency);
     }
 
     public static function of(
