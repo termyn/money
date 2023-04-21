@@ -18,7 +18,7 @@ final class Currencies
     public static function from(string $code): Currency
     {
         $classMap = self::$map;
-        $class = $classMap[mb_strtolower($code)] ?? null;
+        $class = $classMap[mb_strtoupper($code)] ?? null;
 
         return is_a($class, Currency::class, true) ? new $class() : throw new UnsupportedCurrency($code);
     }
