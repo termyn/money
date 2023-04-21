@@ -44,15 +44,14 @@ final readonly class Money
         return new self($amount / $currency->fraction(), $currency);
     }
 
-    public function comparable(self $that): bool
+    public function isComparable(self $that): bool
     {
         return $this->currency->equals($that->currency);
     }
 
     public function equals(self $that): bool
     {
-        return $this->comparable($that)
-            && $this->amountInSubunit === $that->amountInSubunit;
+        return $this->compare($that) === 0;
     }
 
     public function greaterThan(self $that): bool
@@ -80,7 +79,7 @@ final readonly class Money
         return $this->amountInSubunit === 0;
     }
 
-    public function moreThanZero(): bool
+    public function greaterThanZero(): bool
     {
         return $this->amountInSubunit > 0;
     }
@@ -92,7 +91,7 @@ final readonly class Money
 
     public function add(self $that): self
     {
-        if (! $this->comparable($that)) {
+        if (! $this->isComparable($that)) {
             throw new MismatchCurrencies($this, $that);
         }
 
@@ -104,7 +103,7 @@ final readonly class Money
 
     public function subtract(self $that): self
     {
-        if (! $this->comparable($that)) {
+        if (! $this->isComparable($that)) {
             throw new MismatchCurrencies($this, $that);
         }
 
@@ -161,14 +160,14 @@ final readonly class Money
     public function negate(): self
     {
         return self::ofSub(
-            amount: (-1 * $this->amountInSubunit),
+            amount: $this->greaterThanZero() ? -1 * $this->amountInSubunit : $this->amountInSubunit,
             currency: $this->currency,
         );
     }
 
     private function compare(self $that): int
     {
-        if (! $this->comparable($that)) {
+        if (! $this->isComparable($that)) {
             throw new MismatchCurrencies($this, $that);
         }
 
