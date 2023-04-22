@@ -24,7 +24,7 @@ final class SubunitTest extends TestCase
             $this->assertEquals($fraction, $subunit->fraction);
         }
     }
-    
+
     public function testExceptionIfPrecisionIsOutOfRange(): void
     {
         $this->expectException(InvalidArgumentException::class);
