@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Termyn\Test\Currency\Unit;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Termyn\Currency\Unit\Subunit;
 
 final class SubunitTest extends TestCase
 {
-    public function testCreation(): void
+    #[Test]
+    public function shouldBeCreated(): void
     {
         $code = 'cent';
         $symbol = 'c';
@@ -25,14 +27,16 @@ final class SubunitTest extends TestCase
         }
     }
 
-    public function testExceptionIfPrecisionIsOutOfRange(): void
+    #[Test]
+    public function throwsExceptionIfPrecisionIsOutOfRange(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new Subunit('cent', 'c', 2);
     }
 
-    public function testEquality(): void
+    #[Test]
+    public function canBeEqual(): void
     {
         $cent = new Subunit('cent', 'c', 100);
         $penny = new Subunit('penny', 'p', 10);
@@ -41,10 +45,20 @@ final class SubunitTest extends TestCase
         $this->assertFalse($cent->equals($penny));
     }
 
-    public function testPrecision(): void
+    #[Test]
+    public function returnsExpectedPrecision(): void
     {
-        $cent = new Subunit('cent', 'c', 100);
+        $data = [
+            0 => 1,
+            1 => 10,
+            2 => 100,
+            3 => 1000,
+        ];
 
-        $this->assertEquals(2, $cent->precision());
+        foreach ($data as $precision => $fraction) {
+            $cent = new Subunit('cent', 'c', $fraction);
+
+            $this->assertEquals($precision, $cent->precision());
+        }
     }
 }

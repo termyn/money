@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Termyn\Test;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Termyn\Currency\Euro;
 use Termyn\Currency\UsDollar;
@@ -24,7 +25,8 @@ final class MoneyTest extends TestCase
         parent::setUp();
     }
 
-    public function testCreationBasedOnSuperunit(): void
+    #[Test]
+    public function shouldBeCreatedBasedOnSuperunit(): void
     {
         $amount = 1.20;
 
@@ -34,7 +36,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals($this->euro, $money->currency);
     }
 
-    public function testCreationBasedOnSubunit(): void
+    #[Test]
+    public function shouldBeCreatedBasedOnSubunit(): void
     {
         $amount = 1.20;
 
@@ -44,7 +47,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals($this->euro, $money->currency);
     }
 
-    public function testComparison(): void
+    #[Test]
+    public function canBeCompared(): void
     {
         $origin = Money::of(1.2, $this->euro);
 
@@ -55,18 +59,19 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->isComparable($notComparable));
     }
 
-    public function testEquality(): void
+    #[Test]
+    public function canBeEqual(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $same = Money::of(1.2, $this->euro);
         $similar = Money::of(2.2, $this->euro);
-        $another = Money::of(2.2, $this->usDollar);
 
         $this->assertTrue($origin->equals($same));
         $this->assertFalse($origin->equals($similar));
     }
 
-    public function testEqualityThrowsExceptionOnMismatchCurrencies(): void
+    #[Test]
+    public function throwsExceptionOnMismatchCurrencies(): void
     {
         $first = Money::of(1.2, $this->euro);
         $second = Money::of(1.2, $this->usDollar);
@@ -76,7 +81,8 @@ final class MoneyTest extends TestCase
         $first->equals($second);
     }
 
-    public function testItIsGreaterThan(): void
+    #[Test]
+    public function canBeGreaterThan(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $smaller = Money::of(1.0, $this->euro);
@@ -86,7 +92,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->greaterThan($greater));
     }
 
-    public function testItIsGreaterThanOrEquals(): void
+    #[Test]
+    public function canBeGreaterThanOrEquals(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $smaller = Money::of(1.0, $this->euro);
@@ -97,7 +104,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->greaterThanOrEqualTo($greater));
     }
 
-    public function testItIsLessThan(): void
+    #[Test]
+    public function canBeLessThan(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $smaller = Money::of(1.0, $this->euro);
@@ -107,7 +115,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->lessThan($smaller));
     }
 
-    public function testItIsLessThanOrEquals(): void
+    #[Test]
+    public function canBeLessThanOrEquals(): void
     {
         $origin = Money::of(1.2, $this->euro);
         $smaller = Money::of(1.0, $this->euro);
@@ -118,7 +127,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($origin->lessThanOrEqualTo($smaller));
     }
 
-    public function testItEqualsToZero(): void
+    #[Test]
+    public function canBeEqualToZero(): void
     {
         $negative = Money::ofSub(-1, $this->euro);
         $zero = Money::ofSub(0, $this->euro);
@@ -129,7 +139,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($positive->equalToZero());
     }
 
-    public function testItIsGreaterThanZero(): void
+    #[Test]
+    public function canBeGreaterThanZero(): void
     {
         $negative = Money::ofSub(-1, $this->euro);
         $zero = Money::ofSub(0, $this->euro);
@@ -140,7 +151,8 @@ final class MoneyTest extends TestCase
         $this->assertTrue($positive->greaterThanZero());
     }
 
-    public function testItIsLessThanZero(): void
+    #[Test]
+    public function canBeLessThanZero(): void
     {
         $negative = Money::ofSub(-1, $this->euro);
         $zero = Money::ofSub(0, $this->euro);
@@ -151,7 +163,8 @@ final class MoneyTest extends TestCase
         $this->assertFalse($positive->lessThanZero());
     }
 
-    public function testAddition(): void
+    #[Test]
+    public function shouldBeAddedUp(): void
     {
         $amount = 1.2;
 
@@ -161,7 +174,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals($amount + $amount, $addition->amount);
     }
 
-    public function testAdditionThrowsExceptionOnMismatchCurrencies(): void
+    #[Test]
+    public function throwsExceptionWhenAddingUpOnMismatchCurrencies(): void
     {
         $augend = Money::of(1.2, $this->euro);
         $addend = Money::of(1.2, $this->usDollar);
@@ -171,7 +185,8 @@ final class MoneyTest extends TestCase
         $augend->add($addend);
     }
 
-    public function testSubtraction(): void
+    #[Test]
+    public function shouldBeSubtracted(): void
     {
         $amount = 10.2;
 
@@ -181,7 +196,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals($amount - $amount, $subtraction->amount);
     }
 
-    public function testSubtractionThrowsExceptionOnMismatchCurrencies(): void
+    #[Test]
+    public function throwsExceptionWhenSubtractingOnMismatchCurrencies(): void
     {
         $minuend = Money::of(1.2, $this->euro);
         $subtrahend = Money::of(1.2, $this->usDollar);
@@ -191,7 +207,8 @@ final class MoneyTest extends TestCase
         $minuend->subtract($subtrahend);
     }
 
-    public function testMultiplication(): void
+    #[Test]
+    public function canBeMultiplied(): void
     {
         $amount = 2.2;
 
@@ -201,7 +218,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals(round($amount * $amount, 2), $multiplication->amount);
     }
 
-    public function testDivision(): void
+    #[Test]
+    public function canBeDevided(): void
     {
         $amount = 2.2;
 
@@ -211,7 +229,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals(round($amount / $amount, 2), $division->amount);
     }
 
-    public function testItTransformToPositive(): void
+    #[Test]
+    public function shouldBeTransformToPositive(): void
     {
         $amount = 1;
 
@@ -228,7 +247,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals(0, $absoluteZero->amount);
     }
 
-    public function testItTransformToNegative(): void
+    #[Test]
+    public function shouldBeTransformToNegative(): void
     {
         $amount = -1;
 
@@ -245,7 +265,8 @@ final class MoneyTest extends TestCase
         $this->assertEquals(0, $negatedZero->amount);
     }
 
-    public function testToString(): void
+    #[Test]
+    public function shouldBeReturnAsString(): void
     {
         $money = Money::of(1.2, $this->euro);
 

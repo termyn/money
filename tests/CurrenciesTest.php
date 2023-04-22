@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Termyn\Test;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Termyn\Currencies;
 use Termyn\Currency\UnsupportedCurrency;
 
 final class CurrenciesTest extends TestCase
 {
-    public function testCreationOfCurrencyFromCode(): void
+    #[Test]
+    public function shouldBeCreatedFromCode(): void
     {
         $codes = ['EUR', 'USD'];
 
@@ -21,7 +23,8 @@ final class CurrenciesTest extends TestCase
         }
     }
 
-    public function testThrowsUnsupportedCurrencyException(): void
+    #[Test]
+    public function throwsExceptionIfCurrencyIsUnsupported(): void
     {
         $this->expectException(UnsupportedCurrency::class);
 
