@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Termyn;
 
 use Termyn\Currency\Euro;
+use Termyn\Currency\KorunaCeska;
 use Termyn\Currency\UnsupportedCurrency;
 use Termyn\Currency\UsDollar;
 
 final class Currencies
 {
     private static array $map = [
+        'CZK' => KorunaCeska::class,
         'EUR' => Euro::class,
         'USD' => UsDollar::class,
     ];
