@@ -230,6 +230,18 @@ final class MoneyTest extends TestCase
     }
 
     #[Test]
+    public function shouldBeRoundedToNearestUnit(): void
+    {
+        $value = 2.35;
+        $expected = 2.00;
+
+        $origin = Money::of($value, $this->euro);
+        $rounded = $origin->roundToNearest();
+
+        $this->assertEquals($expected, $rounded->amount);
+    }
+
+    #[Test]
     public function shouldBeTransformToPositive(): void
     {
         $amount = 1;

@@ -101,10 +101,9 @@ final readonly class Money implements Stringable
             throw new MismatchCurrencies($this, $that);
         }
 
-        return self::ofSub(
-            amount: $this->amountInSubunit + $that->amountInSubunit,
-            currency: $this->currency,
-        );
+        $amountInSubunit = $this->amountInSubunit + $that->amountInSubunit;
+
+        return self::ofSub($amountInSubunit, $this->currency);
     }
 
     public function subtract(self $that): self
@@ -113,8 +112,10 @@ final readonly class Money implements Stringable
             throw new MismatchCurrencies($this, $that);
         }
 
+        $amountInSubunit = $this->amountInSubunit - $that->amountInSubunit;
+
         return self::ofSub(
-            amount: $this->amountInSubunit - $that->amountInSubunit,
+            amount: $amountInSubunit,
             currency: $this->currency
         );
     }
@@ -124,17 +125,16 @@ final readonly class Money implements Stringable
      */
     public function multiply(
         int|float $factor,
+        int $precision = 2,
         int $rounding = self::ROUND_HALF_UP,
     ): self {
-        $result = round(
+        $amountInSubunit = round(
             num: $this->amountInSubunit * $factor,
+            precision: $precision,
             mode: $rounding,
         );
 
-        return self::ofSub(
-            amount: intval($result),
-            currency: $this->currency,
-        );
+        return self::ofSub(intval($amountInSubunit), $this->currency);
     }
 
     /**
@@ -144,14 +144,23 @@ final readonly class Money implements Stringable
         int|float $divisor,
         int $rounding = self::ROUND_HALF_UP,
     ): self {
-        $result = round(
+        $amountInSubunit = round(
             num: $this->amountInSubunit / $divisor,
             mode: $rounding,
         );
 
-        return self::ofSub(
-            amount: intval($result),
-            currency: $this->currency,
+        return self::ofSub(intval($amountInSubunit), $this->currency);
+    }
+
+    /**
+     * @phpstan-param self::ROUND_* $rounding
+     */
+    public function roundToNearest(
+        int $rounding = self::ROUND_HALF_UP,
+    ): self {
+        return self::of(
+            round($this->amount, 0, $rounding),
+            $this->currency,
         );
     }
 
