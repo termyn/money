@@ -11,17 +11,33 @@ use Termyn\Currency\UsDollar;
 
 final class Currencies
 {
-    private static array $map = [
+    private static array $codes = [
         'CZK' => KorunaCeska::class,
         'EUR' => Euro::class,
         'USD' => UsDollar::class,
     ];
 
-    public static function from(string $code): Currency
-    {
-        $classMap = self::$map;
-        $class = $classMap[mb_strtoupper($code)] ?? null;
+    private static array $symbols = [
+        'Kč' => KorunaCeska::class,
+        '€' => Euro::class,
+        '$' => UsDollar::class,
+    ];
 
-        return is_a($class, Currency::class, true) ? new $class() : throw new UnsupportedCurrency($code);
+    public static function fromCode(string $code): Currency
+    {
+        $class = self::$codes[mb_strtoupper($code)] ?? null;
+
+        return is_a($class, Currency::class, true)
+            ? new $class()
+            : throw UnsupportedCurrency::code($code);
+    }
+
+    public static function fromSymbol(string $symbol): Currency
+    {
+        $class = self::$symbols[$symbol] ?? null;
+
+        return is_a($class, Currency::class, true)
+            ? new $class()
+            : throw UnsupportedCurrency::symbol($symbol);
     }
 }

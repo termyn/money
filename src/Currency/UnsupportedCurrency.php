@@ -5,14 +5,21 @@ declare(strict_types=1);
 namespace Termyn\Currency;
 
 use DomainException;
-use Termyn\Currency;
 
 final class UnsupportedCurrency extends DomainException
 {
-    public function __construct(string $code)
+    public static function code(string $code): self
     {
-        parent::__construct(
-            message: sprintf('Currency "%s" is currently not supported. Add it by implementing the interface %s', $code, Currency::class),
+        return new self(
+            message: sprintf('Currency code "%s" is currently not supported.', $code),
+            code: 501,
+        );
+    }
+
+    public static function symbol(string $symbol): self
+    {
+        return new self(
+            message: sprintf('Currency symbol "%s" is currently not supported.', $symbol),
             code: 501,
         );
     }

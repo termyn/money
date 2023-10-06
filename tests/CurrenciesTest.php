@@ -14,20 +14,32 @@ final class CurrenciesTest extends TestCase
     #[Test]
     public function shouldBeCreatedFromCode(): void
     {
-        $codes = ['EUR', 'USD'];
+        $codes = ['CZK', 'EUR', 'USD'];
 
         foreach ($codes as $code) {
-            $currency = Currencies::from($code);
+            $currency = Currencies::fromCode($code);
 
             $this->assertEquals($code, $currency->code());
         }
     }
 
     #[Test]
-    public function throwsExceptionIfCurrencyIsUnsupported(): void
+    public function shouldBeCreatedFromSymbol(): void
+    {
+        $symbols = ['Kč', '€', '$'];
+
+        foreach ($symbols as $symbol) {
+            $currency = Currencies::fromSymbol($symbol);
+
+            $this->assertEquals($symbol, $currency->mainUnit->symbol);
+        }
+    }
+
+    #[Test]
+    public function throwsExceptionIfCurrencyCodeIsUnsupported(): void
     {
         $this->expectException(UnsupportedCurrency::class);
 
-        Currencies::from('CZK');
+        Currencies::fromSymbol('Sk');
     }
 }
