@@ -33,7 +33,9 @@ final readonly class Money implements Stringable
 
     public function __toString(): string
     {
-        return sprintf('%s %s', number_format($this->amount, $this->currency->precision()), $this->currency);
+        $sign = $this->lessThanZero() ? '-' : '';
+
+        return sprintf('%s%s%s', $sign, $this->currency->symbol(), $this->absolute()->amount);
     }
 
     public static function of(

@@ -280,8 +280,15 @@ final class MoneyTest extends TestCase
     #[Test]
     public function shouldBeReturnAsString(): void
     {
-        $money = Money::of(1.2, $this->euro);
+        $money = Money::of(1.25, $this->euro);
 
-        $this->assertEquals('1.20 EUR', sprintf('%s', $money));
+        $this->assertEquals('€1.25', sprintf('%s', $money));
+    }
+
+    public function shouldBeReturnAsNegativeString(): void
+    {
+        $money = Money::of(-1350.45, $this->euro);
+
+        $this->assertEquals('-€1350.45', sprintf('%s', $money));
     }
 }
