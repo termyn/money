@@ -32,6 +32,11 @@ abstract readonly class Currency implements Stringable
         return $this->mainUnit->code;
     }
 
+    public function symbol(): string
+    {
+        return $this->mainUnit->symbol;
+    }
+
     public function fraction(): int
     {
         return $this->subunit->fraction;
