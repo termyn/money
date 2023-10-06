@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Termyn\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Termyn\Currency\Euro;
 use Termyn\Currency\UsDollar;
+use Termyn\InvalidMoneyString;
 use Termyn\Money;
 use Termyn\Money\MismatchCurrencies;
 
@@ -45,6 +47,42 @@ final class MoneyTest extends TestCase
 
         $this->assertEquals($amount, $money->amount);
         $this->assertEquals($this->euro, $money->currency);
+    }
+
+    #[Test]
+    #[DataProvider('provideValidStrings')]
+    public function shouldBeCreatedFromString(string $string, float $amount): void
+    {
+        $money = Money::from($string);
+
+        $this->assertEquals($amount, $money->amount);
+        $this->assertEquals($this->euro, $money->currency);
+    }
+
+    public static function provideValidStrings(): array
+    {
+        $amount = 1.25;
+
+        return [
+            [sprintf('€%s', $amount), $amount],
+            [sprintf('-€%s', $amount), -1 * $amount],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideInvalidStrings')]
+    public function throwsExceptionOnInvalidString(string $money): void
+    {
+        $this->expectException(InvalidMoneyString::class);
+
+        Money::from($money);
+    }
+
+    public static function provideInvalidStrings(): array
+    {
+        return [
+            ['125'], ['$1 250,00'], ['$1,250.50'],
+        ];
     }
 
     #[Test]

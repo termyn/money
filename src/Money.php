@@ -52,6 +52,24 @@ final readonly class Money implements Stringable
         return new self($amount / $currency->fraction(), $currency);
     }
 
+    public static function from(string $money): self
+    {
+        $parts = [];
+        $pattern = '/^(\-|\+)?([^0-9\-\+]{1,3})([1-9]+[0-9\.]*)$/';
+
+        preg_match($pattern, $money, $parts);
+        if (count($parts) !== 4) {
+            throw new InvalidMoneyString($money);
+        }
+
+        $symbol = sprintf('%s', $parts[2]);
+        $amount = floatval(
+            sprintf('%s%s', $parts[1], $parts[3])
+        );
+
+        return self::of($amount, Currencies::fromSymbol($symbol));
+    }
+
     public function isComparable(self $that): bool
     {
         return $this->currency->equals($that->currency);
