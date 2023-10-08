@@ -61,12 +61,18 @@ final class MoneyTest extends TestCase
 
     public static function provideValidStrings(): array
     {
-        $amount = 1.25;
+        $amounts = [0, 0.00, 1.25, 1500];
+        $strings = array_values(
+            array_map(
+                fn (int|float $amount): array => [
+                    [sprintf('€%s', $amount), $amount],
+                    [sprintf('-€%s', $amount), -1 * $amount],
+                ],
+                $amounts,
+            )
+        );
 
-        return [
-            [sprintf('€%s', $amount), $amount],
-            [sprintf('-€%s', $amount), -1 * $amount],
-        ];
+        return array_merge(...$strings);
     }
 
     #[Test]
@@ -81,7 +87,7 @@ final class MoneyTest extends TestCase
     public static function provideInvalidStrings(): array
     {
         return [
-            ['125'], ['$1 250,00'], ['$1,250.50'],
+            ['0'], ['0.00'], ['125'], ['$1 250,00'], ['$1,250.50'],
         ];
     }
 

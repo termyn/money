@@ -54,11 +54,11 @@ final readonly class Money implements Stringable
 
     public static function from(string $money): self
     {
+        $pattern = '/^(\-|\+)?([^0-9\-\+]{1,3})([0-9]+(\.[0-9]+)?)$/';
         $parts = [];
-        $pattern = '/^(\-|\+)?([^0-9\-\+]{1,3})([1-9]+[0-9\.]*)$/';
 
-        preg_match($pattern, $money, $parts);
-        if (count($parts) !== 4) {
+        $matched = (bool) preg_match($pattern, $money, $parts);
+        if (! $matched) {
             throw new InvalidMoneyString($money);
         }
 
