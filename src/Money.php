@@ -35,7 +35,7 @@ final readonly class Money implements Stringable
     {
         $sign = $this->lessThanZero() ? '-' : '';
 
-        return sprintf('%s%s%s', $sign, $this->currency->symbol(), $this->absolute()->amount);
+        return sprintf('%s%s%01.2f', $sign, $this->currency->symbol(), $this->absolute()->amount);
     }
 
     public static function of(

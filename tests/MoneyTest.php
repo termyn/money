@@ -322,17 +322,38 @@ final class MoneyTest extends TestCase
     }
 
     #[Test]
-    public function shouldBeReturnAsString(): void
+    #[DataProvider('provideAmountsForPositiveString')]
+    public function shouldBeReturnAsString(int|float $amount, string $expected): void
     {
-        $money = Money::of(1.25, $this->euro);
+        $money = Money::of($amount, $this->euro);
 
-        $this->assertEquals('€1.25', sprintf('%s', $money));
+        $this->assertEquals($expected, sprintf('%s', $money));
     }
 
-    public function shouldBeReturnAsNegativeString(): void
+    public static function provideAmountsForPositiveString(): array
     {
-        $money = Money::of(-1350.45, $this->euro);
+        return [
+            [0, '€0.00'],
+            [125, '€125.00'],
+            [1250.15, '€1250.15'],
+            [-0, '€0.00'],
+        ];
+    }
 
-        $this->assertEquals('-€1350.45', sprintf('%s', $money));
+    #[Test]
+    #[DataProvider('provideAmountsForNegativeString')]
+    public function shouldBeReturnAsNegativeString(int|float $amount, string $expected): void
+    {
+        $money = Money::of($amount, $this->euro);
+
+        $this->assertEquals($expected, sprintf('%s', $money));
+    }
+
+    public static function provideAmountsForNegativeString(): array
+    {
+        return [
+            [-125, '-€125.00'],
+            [-1250.15, '-€1250.15'],
+        ];
     }
 }
